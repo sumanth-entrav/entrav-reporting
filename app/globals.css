@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* eNtrav brand theme — shared with the main travel-management app. */
+@theme {
+  --color-ink: #16223a;
+  --color-paper: #f1f4f1;
+  --color-card: #ffffff;
+  --color-text: #1b2438;
+  --color-text-muted: #5b6472;
+  --color-border: #dde2e6;
+  --color-accent: #d98e2b;
+  --color-accent-dark: #b3701a;
+  --color-danger: #b3403a;
+  --color-ok: #2f7d51;
+  --color-ok-bg: #e4f1ea;
+  --color-warn-bg: #fcefd8;
+  --radius-brand: 10px;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html,
+body {
+  background: var(--color-paper);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Reusable surfaces */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: var(--color-warn-bg);
+  color: var(--color-accent-dark);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.btn-outline {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+.btn-outline:hover {
+  background: var(--color-paper);
+}
+
+/* Simple table styling shared across report pages */
+.rtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.rtable th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.rtable td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.rtable td.num,
+.rtable th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.rtable tbody tr:last-child td {
+  border-bottom: none;
+}
+.rtable tbody tr:hover {
+  background: var(--color-paper);
+}

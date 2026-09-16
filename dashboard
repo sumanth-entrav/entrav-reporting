@@ -1,8 +1,0 @@
-# 1. Restore the project from the bundle
-git clone entrav-reporting.bundle entrav-reporting
-cd entrav-reporting
-
-# 2. Point it at your new repo and push as main
-git branch -m claude/adoring-brahmagupta-a3ptx3 main
-git remote set-url origin https://github.com/sumanth-entrav/entrav-reporting.git
-git push -u origin main
