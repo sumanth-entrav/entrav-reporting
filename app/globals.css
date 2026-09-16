@@ -45,6 +45,28 @@ body {
   color: var(--color-accent-dark);
 }
 
+/* Small uppercase label above a heading */
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-dark);
+}
+
+/* Rounded tag used to list dimensions/attributes */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-paper);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
