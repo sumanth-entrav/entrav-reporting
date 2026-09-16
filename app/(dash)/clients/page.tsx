@@ -1,10 +1,12 @@
 import { Card } from "@/components/Card";
 import { Kpi } from "@/components/Kpi";
 import { PageHeader } from "@/components/PageHeader";
+import { EmptyState } from "@/components/EmptyState";
 import { DataTable, type Column } from "@/components/DataTable";
 import { DonutChart } from "@/components/charts/DonutChart";
 import { StackedTrend, type StackRow, type StackSeries } from "@/components/charts/StackedTrend";
 import { byClient, dataset, groupAgg, totals } from "@/lib/metrics";
+import { filterByRange, parseRange } from "@/lib/range";
 import { colorAt } from "@/lib/brand";
 import { fmtInt, fmtZAR, fmtZARCompact } from "@/lib/format";
 
@@ -16,10 +18,14 @@ type ClientRow = {
   topSupplier: string;
 };
 
-export default function ClientsPage() {
-  const t = totals();
-  const rows = dataset();
-  const clients = byClient();
+type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+export default async function ClientsPage({ searchParams }: Props) {
+  const range = parseRange(await searchParams);
+  const rows = filterByRange(dataset(), range);
+  const t = totals(rows);
+  const clients = byClient(rows);
+  const share = (v: number) => (t.gross ? (v / t.gross) * 100 : 0);
 
   // Per-client summary.
   const summaries: ClientRow[] = clients.map((c) => {
@@ -50,36 +56,38 @@ export default function ClientsPage() {
     { header: "Top category", cell: (d) => d.topCategory },
     { header: "Top supplier", cell: (d) => d.topSupplier },
     { header: "Gross spend", align: "right", cell: (d) => fmtZAR(d.gross) },
-    { header: "% of total", align: "right", cell: (d) => ((d.gross / t.gross) * 100).toFixed(1) + "%" },
+    { header: "% of total", align: "right", cell: (d) => share(d.gross).toFixed(1) + "%" },
   ];
 
   return (
     <div className="mx-auto max-w-[1200px] px-4 lg:px-6 py-6 space-y-6">
       <PageHeader title="Clients" subtitle={`Spend across ${fmtInt(t.clients)} billing entities`} />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Kpi label="Clients" value={fmtInt(t.clients)} />
-        <Kpi label="Largest client" value={clients[0]?.label ?? "—"} sub={fmtZAR(clients[0]?.value ?? 0)} accent />
-        <Kpi
-          label="Largest client share"
-          value={(((clients[0]?.value ?? 0) / t.gross) * 100).toFixed(0) + "%"}
-          sub="of gross spend"
-        />
-        <Kpi label="Gross spend" value={fmtZARCompact(t.gross)} sub={fmtZAR(t.gross)} />
-      </div>
+      {rows.length === 0 ? (
+        <EmptyState />
+      ) : (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <Kpi label="Clients" value={fmtInt(t.clients)} />
+            <Kpi label="Largest client" value={clients[0]?.label ?? "—"} sub={fmtZAR(clients[0]?.value ?? 0)} accent />
+            <Kpi label="Largest client share" value={share(clients[0]?.value ?? 0).toFixed(0) + "%"} sub="of gross spend" />
+            <Kpi label="Gross spend" value={fmtZARCompact(t.gross)} sub={fmtZAR(t.gross)} />
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card title="Spend by client" subtitle="Share of total gross spend">
-          <DonutChart data={clients} />
-        </Card>
-        <Card title="Client summary" subtitle="Volume and top spend drivers">
-          <DataTable columns={cols} rows={summaries} keyOf={(d) => d.client} />
-        </Card>
-      </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card title="Spend by client" subtitle="Share of total gross spend">
+              <DonutChart data={clients} />
+            </Card>
+            <Card title="Client summary" subtitle="Volume and top spend drivers">
+              <DataTable columns={cols} rows={summaries} keyOf={(d) => d.client} />
+            </Card>
+          </div>
 
-      <Card title="Monthly spend by client" subtitle="Stacked gross spend per month">
-        <StackedTrend data={stackData} series={series} />
-      </Card>
+          <Card title="Monthly spend by client" subtitle="Stacked gross spend per month">
+            <StackedTrend data={stackData} series={series} />
+          </Card>
+        </>
+      )}
     </div>
   );
 }

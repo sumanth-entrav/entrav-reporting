@@ -12,6 +12,7 @@ const NAV: NavItem[] = [
   { href: "/suppliers", label: "Suppliers", icon: "🏨" },
   { href: "/cost-centres", label: "Cost Centres", icon: "🏢" },
   { href: "/clients", label: "Clients", icon: "🤝" },
+  { href: "/about", label: "About", icon: "ℹ️" },
 ];
 
 function isActive(pathname: string, href: string) {

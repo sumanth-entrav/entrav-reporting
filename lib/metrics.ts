@@ -63,7 +63,9 @@ export function totals(records: SpendRecord[] = RECORDS): Totals {
     tax,
     records: records.length,
     invoices: invoices.size,
-    passengers: META.travellers,
+    // Distinct traveller count is only known for the full dataset (passenger
+    // names aren't stored); NaN signals "not available" for a filtered subset.
+    passengers: records === RECORDS ? META.travellers : NaN,
     suppliers: suppliers.size,
     costCentres: costCentres.size,
     clients: clients.size,
