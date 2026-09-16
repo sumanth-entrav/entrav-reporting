@@ -35,6 +35,25 @@ export default async function LoginPage({
     const pass = String(formData.get("password") ?? "").trim();
     const dest = safeNext(String(formData.get("next") ?? "/"));
 
+    // TEMP diagnostic — logs only lengths and booleans, never the actual
+    // credential values. Remove once the login issue is resolved.
+    const rawUser = process.env.BASIC_AUTH_USER ?? "";
+    const rawPass = process.env.BASIC_AUTH_PASSWORD ?? "";
+    console.log(
+      "AUTH_DIAG " +
+        JSON.stringify({
+          configured: !!rawUser && !!rawPass,
+          expUserLen: rawUser.length,
+          expUserTrimLen: rawUser.trim().length,
+          subUserLen: user.length,
+          userMatch: user === rawUser.trim(),
+          expPassLen: rawPass.length,
+          expPassTrimLen: rawPass.trim().length,
+          subPassLen: pass.length,
+          passMatch: pass === rawPass.trim(),
+        })
+    );
+
     if (!verifyCredentials(user, pass)) {
       redirect(`/login?error=1&next=${encodeURIComponent(dest)}`);
     }
