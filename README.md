@@ -69,10 +69,27 @@ npm run start    # serve the production build
 npm run lint     # eslint
 ```
 
+## Access control (login)
+
+The whole dashboard is behind an HTTP Basic Auth gate (`middleware.ts`). It
+prompts for a username and password on first access. Credentials are read from
+environment variables and are **never committed to this repository**:
+
+| Variable | Example |
+| --- | --- |
+| `BASIC_AUTH_USER` | `sumanth@entrav.co.za` |
+| `BASIC_AUTH_PASSWORD` | *(your password)* |
+
+Set both in **Vercel → Project → Settings → Environment Variables** (for the
+Production and Preview environments), then redeploy. If they are not set the
+site fails closed (HTTP 503) so data is never exposed by accident. For local
+development, put them in a `.env.local` file (git-ignored).
+
 ## Deploying to Vercel
 
-The app is a standard Next.js App Router project with no runtime environment
-variables — connect the repository to Vercel and it builds and deploys as-is.
+A standard Next.js App Router project. `vercel.json` pins the framework preset
+to Next.js. Connect the repository to Vercel, set the two auth variables above,
+and it builds and deploys on every push to `main`.
 
 ---
 
