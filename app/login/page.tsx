@@ -32,7 +32,7 @@ export default async function LoginPage({
   async function signIn(formData: FormData) {
     "use server";
     const user = String(formData.get("username") ?? "").trim();
-    const pass = String(formData.get("password") ?? "");
+    const pass = String(formData.get("password") ?? "").trim();
     const dest = safeNext(String(formData.get("next") ?? "/"));
 
     if (!verifyCredentials(user, pass)) {
