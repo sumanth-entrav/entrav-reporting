@@ -71,9 +71,11 @@ npm run lint     # eslint
 
 ## Access control (login)
 
-The whole dashboard is behind an HTTP Basic Auth gate (`middleware.ts`). It
-prompts for a username and password on first access. Credentials are read from
-environment variables and are **never committed to this repository**:
+The whole dashboard is behind a branded **login page** (`/login`). Unauthenticated
+requests are redirected there by `middleware.ts`; a successful sign-in stores an
+HttpOnly session cookie (an HMAC derived from the password — the password itself
+is never placed in the cookie), and **Sign out** clears it. Credentials are read
+from environment variables and are **never committed to this repository**:
 
 | Variable | Example |
 | --- | --- |
@@ -81,9 +83,10 @@ environment variables and are **never committed to this repository**:
 | `BASIC_AUTH_PASSWORD` | *(your password)* |
 
 Set both in **Vercel → Project → Settings → Environment Variables** (for the
-Production and Preview environments), then redeploy. If they are not set the
-site fails closed (HTTP 503) so data is never exposed by accident. For local
-development, put them in a `.env.local` file (git-ignored).
+Production and Preview environments), then redeploy. If they are not set, the
+login page reports that access control is unconfigured and no sign-in succeeds,
+so data is never exposed by accident. For local development, put them in a
+`.env.local` file (git-ignored).
 
 ## Deploying to Vercel
 
