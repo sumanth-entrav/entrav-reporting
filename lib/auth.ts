@@ -13,8 +13,10 @@ export const SESSION_COOKIE = "entrav_session";
 export const SESSION_MAX_AGE = 60 * 60 * 8; // 8 hours
 
 function getCreds(): { user: string; pass: string } | null {
-  const user = process.env.BASIC_AUTH_USER;
-  const pass = process.env.BASIC_AUTH_PASSWORD;
+  // Trim to tolerate a trailing space/newline accidentally pasted into the
+  // Vercel environment-variable field (a very common cause of "wrong password").
+  const user = process.env.BASIC_AUTH_USER?.trim();
+  const pass = process.env.BASIC_AUTH_PASSWORD?.trim();
   if (!user || !pass) return null;
   return { user, pass };
 }
