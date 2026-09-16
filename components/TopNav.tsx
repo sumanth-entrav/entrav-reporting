@@ -46,9 +46,19 @@ export function TopNav() {
           })}
         </nav>
 
-        <span className="hidden lg:inline text-[0.7rem] text-white/50 whitespace-nowrap">
-          Mar 2024 – Jul 2025
-        </span>
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="hidden lg:inline text-[0.7rem] text-white/50 whitespace-nowrap">
+            Mar 2024 – Jul 2025
+          </span>
+          <form action="/logout" method="post">
+            <button
+              type="submit"
+              className="px-3 py-2 rounded-lg text-sm text-white/70 hover:bg-white/10 transition-colors whitespace-nowrap"
+            >
+              Sign out
+            </button>
+          </form>
+        </div>
       </div>
     </header>
   );

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { TopNav } from "@/components/TopNav";
 
 export const metadata: Metadata = {
   title: "eNtrav Reporting — Travel Spend Dashboard",
@@ -14,12 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full">
-        <div className="flex flex-col min-h-screen">
-          <TopNav />
-          <main className="flex-1 min-w-0">{children}</main>
-        </div>
-      </body>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
